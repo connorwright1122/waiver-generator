@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react";
 import "../App.css"
-import GOOGLE_SCRIPT_URL from "./urls"
+import {GOOGLE_SCRIPT_URL} from "./urls"
 
 
 function WaiverInput() {
@@ -15,12 +15,12 @@ function WaiverInput() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await fetch(GOOGLE_SCRIPT_URL, {
+            fetch("http://localhost:8000/submit", {
                 method: "POST",
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' }
             });
+
             alert("Waiver submitted!")
             setFormData({name: '', email: ''})
         }
