@@ -67,7 +67,7 @@ async def export_pdfs(password: str, film: str = Form(...)):
     # TODO: generate PDFs and save or return paths
     return {"message": "PDFs generated for film: " + film}
 
-def fill_form(name: str, activity: str, gtid: str):
+def fill_form(name: str, activity: str, activity_date: str, gtid: str):
     reader = PdfReader(pdf_path)
     writer = PdfWriter()
 
@@ -76,19 +76,21 @@ def fill_form(name: str, activity: str, gtid: str):
 
     writer.append(reader)
 
-    writer.update_page_form_field_values(
-        writer.pages[0],
-        {"text_name": name,
-         "text_signature": name,
-         "text_activity": activity,
-         "text_gtid": gtid,
-         "text_date1": datetime.now().strftime("%Y-%m-%d"),
-         "text_date2": datetime.now().strftime("%Y-%m-%d"),
-         "checkbox_inperson": "/Yes_esqr",},
-        auto_regenerate=False,
-    )
+    field_updates = {
+        "text_name": name,
+        "text_signature": name,
+        "text_activity": activity,
+        "text_gtid": gtid,
+        "text_date1": activity_date,
+        "text_date2": datetime.now().strftime("%Y-%m-%d"),
+        "text_checkbox": "x"
+    }
 
-    
+    for page_num in range(len(reader.pages)):
+        page = reader.pages[page_num]
+        #writer.add_page(page)  # Add the original page first
+        writer.update_page_form_field_values(writer.pages[page_num], field_updates)
+
 
     year_suffix = datetime.now().strftime("%y")  
     filename = f"GTLiabilityWaiverRelease_FY{year_suffix}_{activity.replace(" ", "")}_{name.replace(" ", "")}.pdf"
@@ -104,4 +106,4 @@ def read_pdf():
     print(fields)
 
 read_pdf()
-fill_form(name="Connor", activity="Test 2", gtid="100")
+fill_form(name="Connor W", activity="Test 2", activity_date=datetime.now().strftime("%Y-%m-%d"), gtid="100") 
