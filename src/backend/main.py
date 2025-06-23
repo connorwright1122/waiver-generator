@@ -8,10 +8,11 @@ import requests
 import json
 from pypdf import PdfReader, PdfWriter 
 from pathlib import Path
+from typing import List
 
 
 
-GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxUdKcBYjtd7hEx2_WwRPEdov-eBn5T0Un5Bk04wXbcRtC-RvR30DalrEBlO01WQqmZ/exec"
+GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz10hEtj4mfaMUVIxshQz1QhvJ0oTp46tTxTNEobYPbc8v7u865a-fMcfywOu8159J9/exec"
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 #public_dir = "../../public/"
@@ -33,7 +34,7 @@ app.add_middleware(
 # Example model
 class Waiver(BaseModel):
     name: str
-    email: str
+    gtid: str
 
 @app.post("/submit")
 async def submit_waiver(waiver: Waiver):
@@ -60,12 +61,31 @@ async def get_waivers():
     except Exception as e:
         return {"status": "error", "error": str(e)}
 
+
+# @app.post("/admin/export")
+# async def export_pdfs(password: str, film: str = Form(...)):
+#     if password != os.getenv("ADMIN_PASSWORD", "supersecret"):
+#         return {"error": "Unauthorized"}
+#     # TODO: generate PDFs and save or return paths
+#     return {"message": "PDFs generated for film: " + film}
+
+
+class Participant(BaseModel):
+    name: str
+    gtid: str
+
+class WaiverExportRequest(BaseModel):
+    film_title: str
+    production_date: str
+    participants: List[Participant]
+
 @app.post("/admin/export")
-async def export_pdfs(password: str, film: str = Form(...)):
-    if password != os.getenv("ADMIN_PASSWORD", "supersecret"):
-        return {"error": "Unauthorized"}
-    # TODO: generate PDFs and save or return paths
-    return {"message": "PDFs generated for film: " + film}
+async def export_pdfs(request: WaiverExportRequest):
+    for person in request.participants:
+        fill_form(name=person.name, activity=request.film_title, activity_date=request.production_date, gtid=person.gtid)
+    return {"message": f"Generated {len(request.participants)} waivers"}
+
+
 
 def fill_form(name: str, activity: str, activity_date: str, gtid: str):
     reader = PdfReader(pdf_path)
@@ -105,5 +125,5 @@ def read_pdf():
 
     print(fields)
 
-read_pdf()
-fill_form(name="Connor W", activity="Test 2", activity_date=datetime.now().strftime("%Y-%m-%d"), gtid="100") 
+#read_pdf()
+#fill_form(name="Connor W", activity="Test 2", activity_date=datetime.now().strftime("%Y-%m-%d"), gtid="100") 

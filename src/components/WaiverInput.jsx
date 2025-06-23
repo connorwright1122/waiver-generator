@@ -24,7 +24,7 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 function WaiverInput() {
     const [formData, setFormData] = useState({
         name: '', 
-        email: ''
+        gtid: ''
     });
     const handleChange = (e) => setFormData({...formData, [e.target.name]: e.target.value});
     const [isChecked, setIsChecked] = useState(false);
@@ -43,7 +43,7 @@ function WaiverInput() {
             });
 
             alert("Waiver submitted!")
-            setFormData({name: '', email: ''})
+            setFormData({name: '', gtid: ''})
         }
         catch (err) {
             alert("Submission failed.")
@@ -52,21 +52,21 @@ function WaiverInput() {
 
     return (
         <>
-        <form onSubmit={handleSubmit}>
-            <input type="text" name="name" placeholder="Your Name" value={formData.name} onChange={handleChange} required />
-            <input name="email" type="email" placeholder="Your Email" value={formData.email} onChange={handleChange} required />
-            <label>
-                <input type="checkbox" name="agree" checked={isChecked} onChange={handleCheck} />
-                I agree to the terms and conditions.
-            </label>
-            <p>Checkbox status: {isChecked ? 'Checked' : 'Unchecked'}</p>
-            <button type="submit" disabled={!isChecked}>Submit</button>
-        </form>
-        <Document file="/GTLiabilityWaiverRelease_FYXX_FILMNAME.pdf">
-            <Page pageNumber={1} />
-            <Page pageNumber={2} />
-            <Page pageNumber={3} />
-        </Document>
+            <form onSubmit={handleSubmit}>
+                <input type="text" name="name" placeholder="Your Name" value={formData.name} onChange={handleChange} required />
+                <input name="gtid" type="text" placeholder="GTID (Optional)" value={formData.gtid} onChange={handleChange} />
+                <label>
+                    <input type="checkbox" name="agree" checked={isChecked} onChange={handleCheck} />
+                    I agree to the terms and conditions.
+                </label>
+                <p>Checkbox status: {isChecked ? 'Checked' : 'Unchecked'}</p>
+                <button type="submit" disabled={!isChecked || formData.name == ""}>Submit</button>
+            </form>
+            <Document file="/GTLiabilityWaiverRelease_FYXX_FILMNAME.pdf">
+                <Page pageNumber={1} />
+                <Page pageNumber={2} />
+                <Page pageNumber={3} />
+            </Document>
         </>
     );
 }
