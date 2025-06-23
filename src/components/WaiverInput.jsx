@@ -1,10 +1,31 @@
 import {useState, useEffect} from "react";
 import "../App.css"
 import {GOOGLE_SCRIPT_URL} from "./urls"
+import { Document, Page } from 'react-pdf'
+
+import { pdfjs } from 'react-pdf';
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.mjs',
+  import.meta.url,
+).toString();
+
+import workerSrc from 'pdfjs-dist/build/pdf.worker.min?url';
+
+pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
+
+import 'react-pdf/dist/Page/TextLayer.css';
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+
+
+
 
 
 function WaiverInput() {
-    const [formData, setFormData] = useState({name: '', email: ''});
+    const [formData, setFormData] = useState({
+        name: '', 
+        email: ''
+    });
     const handleChange = (e) => setFormData({...formData, [e.target.name]: e.target.value});
     const [isChecked, setIsChecked] = useState(false);
 
@@ -30,6 +51,7 @@ function WaiverInput() {
     };
 
     return (
+        <>
         <form onSubmit={handleSubmit}>
             <input type="text" name="name" placeholder="Your Name" value={formData.name} onChange={handleChange} required />
             <input name="email" type="email" placeholder="Your Email" value={formData.email} onChange={handleChange} required />
@@ -40,6 +62,12 @@ function WaiverInput() {
             <p>Checkbox status: {isChecked ? 'Checked' : 'Unchecked'}</p>
             <button type="submit" disabled={!isChecked}>Submit</button>
         </form>
+        <Document file="/GTLiabilityWaiverRelease_FYXX_FILMNAME.pdf">
+            <Page pageNumber={1} />
+            <Page pageNumber={2} />
+            <Page pageNumber={3} />
+        </Document>
+        </>
     );
 }
 export default WaiverInput;
