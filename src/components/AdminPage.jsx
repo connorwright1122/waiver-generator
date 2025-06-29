@@ -7,6 +7,12 @@ function AdminPage() {
     const [data, setData] = useState([]);
     const [filmTitle, setFilmTitle] = useState('');
     const [prodDate, setProdDate] = useState('');
+    const [selected, setSelected] = useState([]);
+    const password = "PASSWORD";
+    const [currentPassword, setCurrentPassword] = useState("");
+    const [currentPasswordCheck, setCurrentPasswordCheck] = useState("");
+    const [error, setError] = useState('');
+
 
     useEffect(() => {
         fetch(`http://localhost:8000/admin/waivers`)
@@ -24,7 +30,7 @@ function AdminPage() {
             const payload = {
                 film_title: filmTitle,
                 production_date: prodDate,
-                participants: data.map(entry => ({
+                participants: selected.map(entry => ({
                   name: entry.name,
                   gtid: String(entry.gtid),
                 })),
@@ -36,72 +42,120 @@ function AdminPage() {
                 body: JSON.stringify(payload),
             }).then(res => res.json()).then(console.log) ;
 
-            alert("Waivers generated!")
-            setFormData({name: '', gtid: ''})
+            alert(`Generated ${selected.length} waivers!`);
+            //setFormData({name: '', gtid: ''});
         }
         catch (err) {
-            alert("Submission failed.")
+            alert("Submission failed.");
         }
     };
+
+    const handleCheckPassword = () => {
+        try {
+            setCurrentPasswordCheck(currentPassword);
+            setError('');
+        } catch {
+            setError('Incorrect Password');
+        }
+    }
 
     return (
         <div className="m-5">
             
             <h2>Admin Panel</h2>
-            <input
-                placeholder="Film Title"
-                value={filmTitle}
-                onChange={(e) => setFilmTitle(e.target.value)}
-                className="input"
-            />
+            {currentPasswordCheck != password ? (
+                <>
+                    <input
+                        placeholder="Enter password..."
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                        className="input"
+                    />
 
-            <input
-                placeholder="Production Date"
-                value={prodDate}
-                onChange={(e) => setProdDate(e.target.value)}
-                className="input"
-            />
+                    <button onClick={handleCheckPassword}>Submit</button>
 
-            <button onClick={handleGenerateWaivers}>Generate Waivers</button>
+                    {error !== '' && (<p className="error">{error}</p>)}
+                </>
+            ) : (
+            <>
+                <input
+                    placeholder="Film Title"
+                    value={filmTitle}
+                    onChange={(e) => setFilmTitle(e.target.value)}
+                    className="input"
+                />
 
-            <h2>Responses from the Last Week</h2>
-            {/*
-            <ul>
-                {Array.isArray(data) ? (
-                    data.map((entry, i) => (
-                    <li key={i}>{entry.name} - {entry.gtid}</li>
-                    ))
-                ) : (
-                    <li>No data found or unauthorized access</li>
-                )}
-            </ul>
-            */}
+                <input
+                    placeholder="Production Date"
+                    value={prodDate}
+                    onChange={(e) => setProdDate(e.target.value)}
+                    className="input"
+                />
 
-            <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
-                <table className="table">
-                    {/* head */}
-                    <thead>
-                    <tr>
-                        <th></th>
-                        <th>Name</th>
-                        <th>GTID</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        {Array.isArray(data) ? (
-                            data.map((entry, i) => (
-                                <tr key={i}>
-                                    <td>{i}</td>
-                                    <td>{entry.name}</td>
-                                    <td>{entry.gtid}</td>
+                <button onClick={handleGenerateWaivers}>Generate Waivers</button>
+
+                <h2>Responses from the Last Week</h2>
+
+                <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input
+                                        type="checkbox"
+                                        checked={selected.length === data.length && data.length > 0}
+                                        onChange={(e) => {
+                                        if (e.target.checked) {
+                                            setSelected(data);
+                                        } else {
+                                            setSelected([]);
+                                        }
+                                        }}
+                                        className="checkbox"
+                                    />
+                                </th>
+                                <th>Name</th>
+                                <th>GTID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {Array.isArray(data) ? (
+                                data.map((entry, i) => {
+                                    const isSelected = selected.some(sel => sel.name === entry.name);
+
+                                    const toggleCheckbox = () => {
+                                        if (isSelected) {
+                                            setSelected(prev => prev.filter(p => p.name !== entry.name));
+                                        } else {
+                                            setSelected(prev => [...prev, entry]);
+                                        }
+                                    };
+
+                                    return(
+                                    <tr key={i}>
+                                        <td>
+                                            <p>{i}</p>
+                                            <input
+                                            type="checkbox"
+                                            checked={isSelected}
+                                            onChange={toggleCheckbox}
+                                            className="checkbox"
+                                            />
+                                        </td>
+                                        <td>{entry.name}</td>
+                                        <td>{entry.gtid}</td>
+                                    </tr>);
+                                })
+                            ) : (
+                                <tr>
+                                    <td colSpan={3}>No data found or unauthorized access</td>
                                 </tr>
-                            ))
-                        ) : (
-                            <p>No data found or unauthorized access</p>
-                        )}
-                    </tbody>
-                </table>
-            </div>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </>
+            )}
 
         </div>
       );

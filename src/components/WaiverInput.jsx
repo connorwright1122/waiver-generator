@@ -51,8 +51,8 @@ function WaiverInput() {
     };
 
     return (
-        <>
-            <form onSubmit={handleSubmit} className="max-w-sm mx-auto">
+        <div className="flex flex-col">
+            <form onSubmit={handleSubmit} className="max-w-sm mx-auto flex flex-col">
                 <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} className="input" required />
                 <input name="gtid" type="text" placeholder="GTID (Optional)" value={formData.gtid} onChange={handleChange} className="input" />
                 <label>
@@ -66,7 +66,7 @@ function WaiverInput() {
                 <Page pageNumber={2} />
                 <Page pageNumber={3} />
             </Document>
-        </>
+        </div>
     );
 }
 export default WaiverInput;
