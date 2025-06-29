@@ -52,14 +52,13 @@ function WaiverInput() {
 
     return (
         <>
-            <form onSubmit={handleSubmit}>
-                <input type="text" name="name" placeholder="Your Name" value={formData.name} onChange={handleChange} required />
-                <input name="gtid" type="text" placeholder="GTID (Optional)" value={formData.gtid} onChange={handleChange} />
+            <form onSubmit={handleSubmit} className="max-w-sm mx-auto">
+                <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} className="input" required />
+                <input name="gtid" type="text" placeholder="GTID (Optional)" value={formData.gtid} onChange={handleChange} className="input" />
                 <label>
                     <input type="checkbox" name="agree" checked={isChecked} onChange={handleCheck} />
                     I agree to the terms and conditions.
                 </label>
-                <p>Checkbox status: {isChecked ? 'Checked' : 'Unchecked'}</p>
                 <button type="submit" disabled={!isChecked || formData.name == ""}>Submit</button>
             </form>
             <Document file="/GTLiabilityWaiverRelease_FYXX_FILMNAME.pdf">

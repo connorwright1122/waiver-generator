@@ -45,24 +45,27 @@ function AdminPage() {
     };
 
     return (
-        <div>
+        <div className="m-5">
             
             <h2>Admin Panel</h2>
             <input
                 placeholder="Film Title"
                 value={filmTitle}
                 onChange={(e) => setFilmTitle(e.target.value)}
+                className="input"
             />
 
             <input
                 placeholder="Production Date"
                 value={prodDate}
                 onChange={(e) => setProdDate(e.target.value)}
+                className="input"
             />
 
             <button onClick={handleGenerateWaivers}>Generate Waivers</button>
 
             <h2>Responses from the Last Week</h2>
+            {/*
             <ul>
                 {Array.isArray(data) ? (
                     data.map((entry, i) => (
@@ -72,6 +75,34 @@ function AdminPage() {
                     <li>No data found or unauthorized access</li>
                 )}
             </ul>
+            */}
+
+            <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+                <table className="table">
+                    {/* head */}
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>GTID</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {Array.isArray(data) ? (
+                            data.map((entry, i) => (
+                                <tr key={i}>
+                                    <td>{i}</td>
+                                    <td>{entry.name}</td>
+                                    <td>{entry.gtid}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <p>No data found or unauthorized access</p>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+
         </div>
       );
 }
