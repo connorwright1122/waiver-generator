@@ -10,9 +10,9 @@ function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <>
+    <div className='flex flex-col items-center'>
       <div>
-        <img src={buzzLogo} className="logo" alt="Vite logo" />
+        <img src={buzzLogo} className="logo"/>
       </div>
       <h1>Buzz Studios Liability Waiver Generator</h1>
       <p>
@@ -20,7 +20,7 @@ function App() {
       </p>
       <WaiverInput/>
       <AdminPage/>
-    </>
+    </div>
   )
 }
 

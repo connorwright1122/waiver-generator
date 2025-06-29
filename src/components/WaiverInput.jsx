@@ -51,15 +51,15 @@ function WaiverInput() {
     };
 
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col space-y-4 items-center">
             <form onSubmit={handleSubmit} className="max-w-sm mx-auto flex flex-col">
-                <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} className="input" required />
-                <input name="gtid" type="text" placeholder="GTID (Optional)" value={formData.gtid} onChange={handleChange} className="input" />
+                <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} className="input m-2" required />
+                <input name="gtid" type="text" placeholder="GTID (Optional)" value={formData.gtid} onChange={handleChange} className="input m-2" />
                 <label>
-                    <input type="checkbox" name="agree" checked={isChecked} onChange={handleCheck} />
-                    I agree to the terms and conditions.
+                    <input type="checkbox" name="agree" checked={isChecked} onChange={handleCheck} className="m-2"/>
+                    &nbsp;I agree to the terms and conditions.
                 </label>
-                <button type="submit" disabled={!isChecked || formData.name == ""}>Submit</button>
+                <button type="submit" disabled={!isChecked || formData.name == ""} className="btn m-2">Submit</button>
             </form>
             <Document file="/GTLiabilityWaiverRelease_FYXX_FILMNAME.pdf">
                 <Page pageNumber={1} />

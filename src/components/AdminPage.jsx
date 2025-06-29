@@ -1,6 +1,5 @@
 import {useState, useEffect} from "react";
 import "../App.css"
-import {GOOGLE_SCRIPT_URL} from "./urls"
 
 function AdminPage() {
 
@@ -14,6 +13,7 @@ function AdminPage() {
     const [error, setError] = useState('');
 
 
+    /*
     useEffect(() => {
         fetch(`http://localhost:8000/admin/waivers`)
         .then(result => result.json())
@@ -23,6 +23,17 @@ function AdminPage() {
         })
         .catch(() => alert('Failed to fetch data'));
     }, []);
+    */
+
+    function getData() {
+        fetch(`http://localhost:8000/admin/waivers`)
+        .then(result => result.json())
+        .then(data => {
+            console.log("Received data:", data);
+            setData(data);
+        })
+        .catch(() => alert('Failed to fetch data'));
+    }
 
     const handleGenerateWaivers = async (e) => {
         e.preventDefault();
@@ -43,7 +54,6 @@ function AdminPage() {
             }).then(res => res.json()).then(console.log) ;
 
             alert(`Generated ${selected.length} waivers!`);
-            //setFormData({name: '', gtid: ''});
         }
         catch (err) {
             alert("Submission failed.");
@@ -54,15 +64,20 @@ function AdminPage() {
         try {
             setCurrentPasswordCheck(currentPassword);
             setError('');
+            if (currentPassword == password) {
+                getData();
+            } else {
+                setError('Incorrect Password');
+            }
         } catch {
             setError('Incorrect Password');
         }
     }
 
     return (
-        <div className="m-5">
+        <div className="m-5 space-y-4">
             
-            <h2>Admin Panel</h2>
+            <h1>Admin Panel</h1>
             {currentPasswordCheck != password ? (
                 <>
                     <input
@@ -77,25 +92,26 @@ function AdminPage() {
                     {error !== '' && (<p className="error">{error}</p>)}
                 </>
             ) : (
-            <>
-                <input
-                    placeholder="Film Title"
-                    value={filmTitle}
-                    onChange={(e) => setFilmTitle(e.target.value)}
-                    className="input"
-                />
+            <> 
+                <div className="flex flex-row">
+                    <input
+                        placeholder="Film Title"
+                        value={filmTitle}
+                        onChange={(e) => setFilmTitle(e.target.value)}
+                        className="input"
+                    />
 
-                <input
-                    placeholder="Production Date"
-                    value={prodDate}
-                    onChange={(e) => setProdDate(e.target.value)}
-                    className="input"
-                />
-
-                <button onClick={handleGenerateWaivers}>Generate Waivers</button>
+                    <input
+                        placeholder="Production Date"
+                        value={prodDate}
+                        onChange={(e) => setProdDate(e.target.value)}
+                        className="input"
+                    />
+                </div>
 
                 <h2>Responses from the Last Week</h2>
 
+                {data ? (
                 <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
                     <table className="table">
                         <thead>
@@ -134,7 +150,6 @@ function AdminPage() {
                                     return(
                                     <tr key={i}>
                                         <td>
-                                            <p>{i}</p>
                                             <input
                                             type="checkbox"
                                             checked={isSelected}
@@ -154,8 +169,14 @@ function AdminPage() {
                         </tbody>
                     </table>
                 </div>
+                ) : (
+                    <p>Fetching response data...</p>
+                )}
+
+                <button onClick={handleGenerateWaivers}>Generate Waivers</button>
             </>
             )}
+            
 
         </div>
       );
