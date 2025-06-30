@@ -14,9 +14,9 @@ function App() {
       <div>
         <img src={buzzLogo} className="logo"/>
       </div>
-      <h1>Buzz Studios Liability Waiver Generator</h1>
-      <p>
-        Enter your name, GTID, and check the box to digitally sign the liability waiver. 
+      <h1 className="text-2xl font-bold">Buzz Studios Liability Waiver Generator</h1>
+      <p className="m-2">
+        Enter the details below to to digitally sign the liability waiver. 
       </p>
       <WaiverInput/>
       <AdminPage/>

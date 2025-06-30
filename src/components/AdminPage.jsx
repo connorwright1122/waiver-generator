@@ -90,7 +90,7 @@ function AdminPage() {
     }
 
     return (
-        <div className="m-5 space-y-4 items-center">
+        <div className="m-5 space-y-4 items-center w-11/12">
             
             <h1>Admin Panel</h1>
             {currentPasswordCheck != password ? (
@@ -162,11 +162,11 @@ function AdminPage() {
                         <tbody>
                             {Array.isArray(data) ? (
                                 data.map((entry, i) => {
-                                    const isSelected = selected.some(sel => sel.name === entry.name);
+                                    const isSelected = selected.some(sel => sel.timestamp === entry.timestamp);
 
                                     const toggleCheckbox = () => {
                                         if (isSelected) {
-                                            setSelected(prev => prev.filter(p => p.name !== entry.name));
+                                            setSelected(prev => prev.filter(p => p.timestamp !== entry.timestamp));
                                         } else {
                                             setSelected(prev => [...prev, entry]);
                                         }
