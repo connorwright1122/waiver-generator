@@ -1,2 +1,0 @@
-export const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxT1yjYgB9g9TMaNbb_ZKrpJTEFfPksHY-F4H7Fqq2pB9Kaf-CcT_aNwjKagzn2wChO/exec";
-//export const FASTAPI_BASE = "http://localhost:8000";

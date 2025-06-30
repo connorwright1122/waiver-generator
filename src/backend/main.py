@@ -13,7 +13,7 @@ from typing import List
 
 ## Deployment Link 
 ### when making changes to the google app script, create a new deployment and put it here
-GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby90kHGpE0ERfdkNtWXppKwslpEmrDysrjRGjOrxfyVbMIJioCFQKv_2L_NqDt5z8P9/exec"
+GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzBn08gjtVvo6zYRGBwF56FmYOFHy47WBvexEkyFWGs4pDsC2pzVkc-rpO7IQFAaz_r/exec"
 ## Page Link
 ### Link to the actual google app script edit page
 GOOGLE_SCRIPT_URL_EDIT = "https://script.google.com/u/0/home/projects/1JTK3c75WNw3HxIO6dl4rt6KzuHqIRGgg3W9YCcHn61FPcqEMdCXn8MUj"
@@ -39,6 +39,7 @@ app.add_middleware(
 class Waiver(BaseModel):
     name: str
     gtid: str
+    activity: str
 
 @app.post("/submit")
 async def submit_waiver(waiver: Waiver):

@@ -119,14 +119,14 @@ function AdminPage() {
                
                 <div className="flex flex-row items-center justify-center">
                     <input
-                        placeholder="Film Title"
+                        placeholder="Activity / Film Name"
                         value={filmTitle}
                         onChange={(e) => setFilmTitle(e.target.value)}
                         className="input"
                     />
 
                     <input
-                        placeholder="Production Date"
+                        placeholder="Production Date(s)"
                         value={prodDate}
                         onChange={(e) => setProdDate(e.target.value)}
                         className="input"
@@ -156,6 +156,7 @@ function AdminPage() {
                                 </th>
                                 <th>Name</th>
                                 <th>GTID</th>
+                                <th>Activity</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -183,6 +184,7 @@ function AdminPage() {
                                         </td>
                                         <td>{entry.name}</td>
                                         <td>{entry.gtid}</td>
+                                        <td>{entry.activity}</td>
                                     </tr>);
                                 })
                             ) : (

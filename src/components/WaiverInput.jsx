@@ -1,6 +1,5 @@
 import {useState, useEffect} from "react";
 import "../App.css"
-import {GOOGLE_SCRIPT_URL} from "./urls"
 import { Document, Page } from 'react-pdf'
 
 import { pdfjs } from 'react-pdf';
@@ -24,7 +23,8 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 function WaiverInput() {
     const [formData, setFormData] = useState({
         name: '', 
-        gtid: ''
+        gtid: '',
+        activity: ''
     });
     const handleChange = (e) => setFormData({...formData, [e.target.name]: e.target.value});
     const [isChecked, setIsChecked] = useState(false);
@@ -43,7 +43,7 @@ function WaiverInput() {
             });
 
             alert("Waiver submitted!")
-            setFormData({name: '', gtid: ''})
+            setFormData({name: '', gtid: '', activity: ''})
         }
         catch (err) {
             alert("Submission failed.")
@@ -54,12 +54,13 @@ function WaiverInput() {
         <div className="flex flex-col space-y-4 items-center">
             <form onSubmit={handleSubmit} className="max-w-sm mx-auto flex flex-col">
                 <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} className="input m-2" required />
+                <input name="activity" type="text" placeholder="Activity / Film Name" value={formData.activity} onChange={handleChange} className="input m-2" required />
                 <input name="gtid" type="text" placeholder="GTID (Optional)" value={formData.gtid} onChange={handleChange} className="input m-2" />
                 <label>
                     <input type="checkbox" name="agree" checked={isChecked} onChange={handleCheck} className="m-2"/>
                     &nbsp;I agree to the terms and conditions.
                 </label>
-                <button type="submit" disabled={!isChecked || formData.name == ""} className="btn m-2">Submit</button>
+                <button type="submit" disabled={!isChecked || formData.name == "" || formData.activity == ""} className="btn m-2">Submit</button>
             </form>
             <Document file="/GTLiabilityWaiverRelease_FYXX_FILMNAME.pdf">
                 <Page pageNumber={1} />
