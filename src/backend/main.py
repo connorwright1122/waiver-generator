@@ -11,8 +11,12 @@ from pathlib import Path
 from typing import List
 
 
-
-GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz10hEtj4mfaMUVIxshQz1QhvJ0oTp46tTxTNEobYPbc8v7u865a-fMcfywOu8159J9/exec"
+## Deployment Link 
+### when making changes to the google app script, create a new deployment and put it here
+GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby90kHGpE0ERfdkNtWXppKwslpEmrDysrjRGjOrxfyVbMIJioCFQKv_2L_NqDt5z8P9/exec"
+## Page Link
+### Link to the actual google app script edit page
+GOOGLE_SCRIPT_URL_EDIT = "https://script.google.com/u/0/home/projects/1JTK3c75WNw3HxIO6dl4rt6KzuHqIRGgg3W9YCcHn61FPcqEMdCXn8MUj"
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 #public_dir = "../../public/"
@@ -61,6 +65,21 @@ async def get_waivers():
     except Exception as e:
         return {"status": "error", "error": str(e)}
 
+
+@app.get("/admin/links")
+async def get_links():
+    try:
+        response = requests.get(
+            f"{GOOGLE_SCRIPT_URL}?view=sheet_url",
+            timeout=5
+        )
+        return {
+            "sheet_url": response.json()['url'],
+            "script_url": GOOGLE_SCRIPT_URL_EDIT
+        }
+        #return response.json() 
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
 
 # @app.post("/admin/export")
 # async def export_pdfs(password: str, film: str = Form(...)):

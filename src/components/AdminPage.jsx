@@ -11,6 +11,8 @@ function AdminPage() {
     const [currentPassword, setCurrentPassword] = useState("");
     const [currentPasswordCheck, setCurrentPasswordCheck] = useState("");
     const [error, setError] = useState('');
+    const [scriptURL, setScriptURL] = useState('');
+    const [sheetURL, setSheetURL] = useState('');
 
 
     /*
@@ -29,10 +31,22 @@ function AdminPage() {
         fetch(`http://localhost:8000/admin/waivers`)
         .then(result => result.json())
         .then(data => {
-            console.log("Received data:", data);
+            console.log("Received waiver data:", data);
             setData(data);
         })
         .catch(() => alert('Failed to fetch data'));
+    }
+
+    function getLinks() {
+        fetch(`http://localhost:8000/admin/links`)
+        .then(result => result.json())
+        .then(data => {
+            console.log("Received links data:", data);
+            setScriptURL(data.script_url.replace("exec", "edit"));
+            setSheetURL(data.sheet_url);
+        })
+        .catch(() => console.log('Failed to fetch links data'));
+        
     }
 
     const handleGenerateWaivers = async (e) => {
@@ -66,6 +80,7 @@ function AdminPage() {
             setError('');
             if (currentPassword == password) {
                 getData();
+                getLinks();
             } else {
                 setError('Incorrect Password');
             }
@@ -75,7 +90,7 @@ function AdminPage() {
     }
 
     return (
-        <div className="m-5 space-y-4">
+        <div className="m-5 space-y-4 items-center">
             
             <h1>Admin Panel</h1>
             {currentPasswordCheck != password ? (
@@ -93,7 +108,16 @@ function AdminPage() {
                 </>
             ) : (
             <> 
-                <div className="flex flex-row">
+                {scriptURL === "" || sheetURL === "" ? (
+                    <p>Fetching links...</p>
+                ) :
+                (<>
+                    <p>Script URL: <a href={scriptURL} target="_blank">{scriptURL}</a></p>
+                    <p>Sheet URL: <a href={sheetURL} target="_blank">{sheetURL}</a></p>
+                </>)
+                }
+               
+                <div className="flex flex-row items-center justify-center">
                     <input
                         placeholder="Film Title"
                         value={filmTitle}
@@ -111,7 +135,7 @@ function AdminPage() {
 
                 <h2>Responses from the Last Week</h2>
 
-                {data ? (
+                {data && data.length > 0 ? (
                 <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
                     <table className="table">
                         <thead>
