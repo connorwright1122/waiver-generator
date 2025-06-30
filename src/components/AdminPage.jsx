@@ -92,9 +92,9 @@ function AdminPage() {
     return (
         <div className="m-5 space-y-4 items-center w-11/12">
             
-            <h1>Admin Panel</h1>
+            <h1 className="text-2xl font-bold">Admin Panel</h1>
             {currentPasswordCheck != password ? (
-                <>
+                <div className="flex flex-col items-center">
                     <input
                         placeholder="Enter password..."
                         value={currentPassword}
@@ -105,7 +105,7 @@ function AdminPage() {
                     <button onClick={handleCheckPassword}>Submit</button>
 
                     {error !== '' && (<p className="error">{error}</p>)}
-                </>
+                </div>
             ) : (
             <> 
                 {scriptURL === "" || sheetURL === "" ? (

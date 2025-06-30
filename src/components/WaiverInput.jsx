@@ -55,7 +55,7 @@ function WaiverInput() {
             <form onSubmit={handleSubmit} className="max-w-sm mx-auto flex flex-col">
                 <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} className="input m-2" required />
                 <input name="activity" type="text" placeholder="Activity / Film Name" value={formData.activity} onChange={handleChange} className="input m-2" required />
-                <input name="gtid" type="text" placeholder="GTID (Optional)" value={formData.gtid} onChange={handleChange} className="input m-2" />
+                <input name="gtid" type="text" placeholder="GTID (Required for GT Students)" value={formData.gtid} onChange={handleChange} className="input m-2" />
                 <label>
                     <input type="checkbox" name="agree" checked={isChecked} onChange={handleCheck} className="m-2"/>
                     &nbsp;I agree to the terms and conditions.
